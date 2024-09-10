@@ -1,14 +1,7 @@
-from abc import ABC, abstractmethod
+
+from utils.base import ActivationFunction
+
 import numpy as np
-
-class ActivationFunction(ABC):
-    @abstractmethod
-    def activate(self, x: np.ndarray) -> np.ndarray:
-        pass
-
-    @abstractmethod
-    def derivative(self, x: np.ndarray) -> np.ndarray:
-        pass
 
 class ReLu(ActivationFunction):
     def activate(self, x: np.ndarray) -> np.ndarray:

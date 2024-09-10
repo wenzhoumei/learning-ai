@@ -1,24 +1,27 @@
 import numpy as np
 from typing import List
 
-from utils.activation_functions import ActivationFunction, ReLu, Softmax
-from utils.loss_functions import LossFunction, MeanSquaredError
+import utils.base as base
 
-from utils.load_data import loadMNIST
+import utils.data_loaders as dl
+import utils.activation_functions as af
+import utils.loss_functions as lf
+import utils.weight_initializers as wi
+import utils.bias_initializers as bi
 
 # Simple one-layer neural network
 class NeuralNetwork:
-    def __init__(self, input_size: int, hidden_size: int, output_size: int, activation_function: ActivationFunction, loss_function: LossFunction):
+    def __init__(self, input_size: int, hidden_size: int, output_size: int, activation_function: base.ActivationFunction, loss_function: base.LossFunction, weight_initializer: base.WeightInitializer, bias_initializer: base.BiasInitializer):
         # Initialize weights and biases
-        self.W1 = np.random.randn(input_size, hidden_size) * 0.01
-        self.b1 = np.zeros((1, hidden_size))
-        self.W2 = np.random.randn(hidden_size, output_size) * 0.01
-        self.b2 = np.zeros((1, output_size))
+        self.W1 = weight_initializer.initialize(input_size, hidden_size)
+        self.b1 = bias_initializer.initialize(hidden_size)
+        self.W2 = weight_initializer.initialize(hidden_size, output_size)
+        self.b2 = bias_initializer.initialize(output_size)
 
         self.activation_function = activation_function
         self.loss_function = loss_function
 
-        self.softmax = Softmax()
+        self.softmax = af.Softmax()
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         # Forward pass
@@ -44,12 +47,13 @@ class NeuralNetwork:
         self.b1 -= learning_rate * db1
 
 if __name__ == '__main__':
-    x_train, y_train, x_test, y_test = loadMNIST()
+    data_loader = dl.MNIST()
+    x_train, y_train, x_test, y_test = data_loader.load()
 
-    learning_rate = 0.05
-    num_epochs = 1000
+    learning_rate = 0.002
+    num_epochs = 100
 
-    nn = NeuralNetwork(input_size=784, hidden_size=20, output_size=10, activation_function=ReLu(), loss_function=MeanSquaredError())
+    nn = NeuralNetwork(input_size=784, hidden_size=10, output_size=10, activation_function=af.ELU(), loss_function=lf.CrossEntropy(), weight_initializer=wi.Xavier(), bias_initializer=bi.Zero())
 
     # Train the network
     for epoch in range(1, num_epochs + 1):
