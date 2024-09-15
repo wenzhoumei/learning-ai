@@ -56,7 +56,7 @@ if __name__ == '__main__':
     learning_rate = 0.002
     num_epochs = 100
 
-    batch_splitter = bs.Stochastic()
+    batch_splitter = bs.MiniBatch(64)
 
     nn = NeuralNetwork(input_size=784, hidden_size=10, output_size=10, activation_function=af.ELU(), loss_function=lf.MSE(), weight_initializer=wi.Xavier(), bias_initializer=bi.Zero())
 
