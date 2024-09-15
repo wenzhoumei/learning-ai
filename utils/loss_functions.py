@@ -2,7 +2,7 @@ from utils.base import LossFunction
 
 import numpy as np
 
-class MeanSquaredError(LossFunction):
+class MSE(LossFunction):
     def loss(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         return np.mean((y_true - y_pred) ** 2)
 

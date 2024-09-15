@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
+from typing import List, Tuple
 
 class ActivationFunction(ABC):
     @abstractmethod
@@ -32,4 +33,9 @@ class WeightInitializer(ABC):
 class DataLoader(ABC):
     @abstractmethod
     def load(self, input_size: int, output_size: int) -> np.ndarray:
+        pass
+
+class BatchSplitter(ABC):
+    @abstractmethod
+    def split(self, x: np.ndarray, y: np.ndarray) -> List[Tuple[np.ndarray, np.ndarray]]:
         pass

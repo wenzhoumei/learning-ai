@@ -8,6 +8,8 @@ import utils.activation_functions as af
 import utils.loss_functions as lf
 import utils.weight_initializers as wi
 import utils.bias_initializers as bi
+import utils.batch_splitter as bs
+
 
 # Simple one-layer neural network
 class NeuralNetwork:
@@ -50,16 +52,23 @@ if __name__ == '__main__':
     data_loader = dl.MNIST()
     x_train, y_train, x_test, y_test = data_loader.load()
 
+    # Define hyperparameters
     learning_rate = 0.002
     num_epochs = 100
 
-    nn = NeuralNetwork(input_size=784, hidden_size=10, output_size=10, activation_function=af.ELU(), loss_function=lf.CrossEntropy(), weight_initializer=wi.Xavier(), bias_initializer=bi.Zero())
+    batch_splitter = bs.Stochastic()
 
-    # Train the network
+    nn = NeuralNetwork(input_size=784, hidden_size=10, output_size=10, activation_function=af.ELU(), loss_function=lf.MSE(), weight_initializer=wi.Xavier(), bias_initializer=bi.Zero())
+
+    # Train the network with mini-batch gradient descent
     for epoch in range(1, num_epochs + 1):
-            output = nn.forward(x_train)
-            nn.backward(x_train, y_train, output, learning_rate)
-            print(f'Epoch {epoch}')
+        mini_batches = batch_splitter.split(x_train, y_train)
+
+        for x_mini_batch, y_mini_batch in mini_batches:
+            output = nn.forward(x_mini_batch)
+            nn.backward(x_mini_batch, y_mini_batch, output, learning_rate)
+
+        print(f'Epoch {epoch}')
     
     # Predict and evaluate on the test set
     predictions = np.argmax(nn.forward(x_test), axis=1)
