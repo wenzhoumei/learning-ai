@@ -4,7 +4,7 @@ This repository is dedicated to my journey in learning and understanding Artific
 ## neural-network-from-scratch
 This part of the Learning AI repository focuses on creating a *modular* neural network from scratch, without relying on deep learning frameworks like TensorFlow or PyTorch.
 
-The model is designed to be as *modular* as possible, allowing parts such as:
+The model is designed to be as **modular** as possible, allowing parts such as:
 - Activation functions
 - Batch sizes
 - Bias and weight initializers
