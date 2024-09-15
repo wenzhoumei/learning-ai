@@ -9,5 +9,6 @@ The model is designed to be as **modular** as possible, allowing parts such as:
 - Batch sizes
 - Bias and weight initializers
 - Loss functions
+- Layers
 
-to be easily swapped and adjusted.
+to be easily swapped, changed or adjusted.
